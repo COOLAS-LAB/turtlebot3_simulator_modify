@@ -31,6 +31,16 @@ roslaunch turtlebot3_teleop single_turtlebot3_teleop_key.launch
 - 参数说明
 
 通过修改 `single_turtlebot3.launch` 中 `<arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>`  的 `turtlebot3_house.world` 为 `turtlebot3_gazebo/worlds` 文件夹下的其它 world 后缀文件可以切换不同的场景。
+
+通过修改 `single_turtlebot3.launch` 中
+```shell
+<arg name="x_pos" default="0.0"/>
+<arg name="y_pos" default="0.0"/>
+<arg name="z_pos" default="0.0"/>
+<arg name="yaw" default="0.0"/>
+```
+修改无人车的初始位姿（在 world 坐标系下的）
+
 - 常用话题说明
 
 /camera/depth/image_raw 为深度图，可通过 rqt_image_view 或 rviz 查看，/camera/depth/points 为点云，可通过 rviz 查看
@@ -38,6 +48,8 @@ roslaunch turtlebot3_teleop single_turtlebot3_teleop_key.launch
 /camera/rgb/image_raw 为 rgb 图，可通过 rqt_image_view 或 rviz 查看
 
 /cmd_vel 为速度控制话题，可以通过 `rostopic pub` 指令发布以控制机器人，实际通过 `single_turtlebot3_teleop_key` 脚本键盘控制更方便，涉及到规划算法时需要用到该话题
+
+/odom 为里程计的 ground_truth 值，是以 world 坐标系为基准的
 
 
 ## 2.3 多机手动控制
@@ -58,6 +70,25 @@ roslaunch turtlebot3_teleop multi_turtlebot3_teleop_key.launch
 
 通过修改 `single_turtlebot3.launch` 中 `<arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>`  的 `turtlebot3_house.world` 为 `turtlebot3_gazebo/worlds` 文件夹下的其它 world 后缀文件可以切换不同的场景。
 
+通过修改 `single_turtlebot3.launch` 中
+```shell
+<arg name="first_tb3_x_pos" default="0.0"/>
+<arg name="first_tb3_y_pos" default="0.0"/>
+<arg name="first_tb3_z_pos" default="0.0"/>
+<arg name="first_tb3_yaw"   default="0.0"/>
+
+<arg name="second_tb3_x_pos" default=" 7.0"/>
+<arg name="second_tb3_y_pos" default="-1.0"/>
+<arg name="second_tb3_z_pos" default=" 0.0"/>
+<arg name="second_tb3_yaw"   default=" 1.57"/>
+
+<arg name="third_tb3_x_pos" default=" 0.5"/>
+<arg name="third_tb3_y_pos" default=" 3.0"/>
+<arg name="third_tb3_z_pos" default=" 0.0"/>
+<arg name="third_tb3_yaw"   default=" 0.0"/>
+```
+来调整三个无人车的初始位姿
+
 - 常用话题说明
 
 同单机一样，只是对三个机器人加上了前缀 `/tb3_0/`、`/tb3_1/`、`/tb3_2/` 加以区分
@@ -76,3 +107,4 @@ roslaunch turtlebot3_teleop multi_turtlebot3_teleop_key.launch
 ## 2.7 多机SLAM
 - to be continue
 
+## 2.8 车机协同
