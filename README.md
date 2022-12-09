@@ -94,7 +94,56 @@ roslaunch turtlebot3_teleop multi_turtlebot3_teleop_key.launch
 同单机一样，只是对三个机器人加上了前缀 `/tb3_0/`、`/tb3_1/`、`/tb3_2/` 加以区分
 
 ## 2.4 UWB
+只在多机下使用
+通过 `/tb3_x/odom` 获取相对于 world 坐标系的位姿，通过该位姿将无人车上的虚拟 UWB 转换到世界坐标系，基于 UWB 的世界坐标系计算相互之间的距离并加上一个的高斯噪声作为仿真。
+
+输出话题为 `/uwb/dis_ra` 与 `/uwb/dis_rb` 均为 `std_msgs/Float64MultiArray` 类型，即数组，表示的是 refrence 无人车（/tb3_0/）与 a 无人车（/tb3_1/） 和 b 无人车（/tb3_2/）之间 UWB 对的距离。
+
+默认 /tb3_0/ 无人车上安装 3 个 UWB，其余两个车上安装两个 UWB。
+
+通过修改 `/turtlebot3_simulations/turtlebot3_gazebo/launch/multi_turtlebot3.launch` 中的
+
+```shell
+<arg name="noise_mean" default=" 0.0"/>
+<arg name="noise_stddev" default=" 0.5"/>
+<arg name="uwb_r1_x" default=" 1.0"/>
+<arg name="uwb_r1_y" default=" 2.0"/>
+<arg name="uwb_r2_x" default=" 3.0"/>
+<arg name="uwb_r2_y" default=" 4.0"/>
+<arg name="uwb_r3_x" default=" 0.0"/>
+<arg name="uwb_r3_y" default=" 5.0"/>
+<arg name="uwb_a0_x" default=" 0.0"/>
+<arg name="uwb_a0_y" default=" 0.0"/>
+<arg name="uwb_a1_x" default=" 1.0"/>
+<arg name="uwb_a1_y" default=" 1.0"/>
+<arg name="uwb_b0_x" default=" 0.0"/>
+<arg name="uwb_b0_y" default=" 0.0"/>
+<arg name="uwb_b1_x" default=" 1.0"/>
+<arg name="uwb_b1_y" default=" 0.0"/>
+```
+
+|参数|作用|
+|-|-|
+|noise_mean|测距噪声均值|
+|noise_stddev|测距噪声方差|
+|uwb_r1_x|reference 车上的第一个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_r1_y|reference 车上的第一个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_r2_x|reference 车上的第二个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_r2_y|reference 车上的第二个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_r3_x|reference 车上的第三个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_r3_y|reference 车上的第三个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_a0_x|a 车上的第一个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_a0_y|a 车上的第一个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_a1_x|a 车上的第二个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_a1_y|a 车上的第二个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_b0_x|b 车上的第一个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_v0_y|b 车上的第一个 UWB 的 y 坐标（相对于车的机体坐标系）|
+|uwb_b1_x|b 车上的第二个 UWB 的 x 坐标（相对于车的机体坐标系）|
+|uwb_b1_y|b 车上的第二个 UWB 的 y 坐标（相对于车的机体坐标系）|
+
 - to be continue
+
+事实上， UWB 之间的测距是随着距离的增加越来越不准的，且在穿越障碍物时其噪声更大，后期加入这些考虑以实现更贴近实际情况的仿真。
 
 ## 2.5 单机视觉 SLAM
 - to be continue

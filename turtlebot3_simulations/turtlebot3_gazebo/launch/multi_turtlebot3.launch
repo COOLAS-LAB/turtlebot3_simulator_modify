@@ -19,6 +19,23 @@
   <arg name="third_tb3_z_pos" default=" 0.0"/>
   <arg name="third_tb3_yaw"   default=" 0.0"/>
 
+  <arg name="noise_mean" default=" 0.0"/>
+  <arg name="noise_stddev" default=" 0.5"/>
+  <arg name="uwb_r1_x" default=" 1.0"/>
+  <arg name="uwb_r1_y" default=" 2.0"/>
+  <arg name="uwb_r2_x" default=" 3.0"/>
+  <arg name="uwb_r2_y" default=" 4.0"/>
+  <arg name="uwb_r3_x" default=" 0.0"/>
+  <arg name="uwb_r3_y" default=" 5.0"/>
+  <arg name="uwb_a0_x" default=" 0.0"/>
+  <arg name="uwb_a0_y" default=" 0.0"/>
+  <arg name="uwb_a1_x" default=" 1.0"/>
+  <arg name="uwb_a1_y" default=" 1.0"/>
+  <arg name="uwb_b0_x" default=" 0.0"/>
+  <arg name="uwb_b0_y" default=" 0.0"/>
+  <arg name="uwb_b1_x" default=" 1.0"/>
+  <arg name="uwb_b1_y" default=" 0.0"/>
+
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
     <arg name="paused" value="false"/>
@@ -61,4 +78,22 @@
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg third_tb3) -x $(arg third_tb3_x_pos) -y $(arg third_tb3_y_pos) -z $(arg third_tb3_z_pos) -Y $(arg third_tb3_yaw) -param robot_description" />
   </group>
 
+  <node pkg="turtlebot3_gazebo" type="uwb_simulator" name="uwb_simulator" output="screen">
+    <param name="noise_mean" type="double" value="$(arg noise_mean)" />
+    <param name="noise_stddev" type="double" value="$(arg noise_stddev)" />
+    <param name="uwb_r1_x" type="double" value="$(arg uwb_r1_x)" />
+    <param name="uwb_r1_y" type="double" value="$(arg uwb_r1_y)" />
+    <param name="uwb_r2_x" type="double" value="$(arg uwb_r2_x)" />
+    <param name="uwb_r2_y" type="double" value="$(arg uwb_r2_y)" />
+    <param name="uwb_r3_x" type="double" value="$(arg uwb_r3_x)" />
+    <param name="uwb_r3_y" type="double" value="$(arg uwb_r3_y)" />
+    <param name="uwb_a0_x" type="double" value="$(arg uwb_a0_x)" />
+    <param name="uwb_a0_y" type="double" value="$(arg uwb_a0_y)" />
+    <param name="uwb_a1_x" type="double" value="$(arg uwb_a1_x)" />
+    <param name="uwb_a1_y" type="double" value="$(arg uwb_a1_y)" />
+    <param name="uwb_b0_x" type="double" value="$(arg uwb_b0_x)" />
+    <param name="uwb_b0_y" type="double" value="$(arg uwb_b0_y)" />
+    <param name="uwb_b1_x" type="double" value="$(arg uwb_b1_x)" />
+    <param name="uwb_b1_y" type="double" value="$(arg uwb_b1_y)" />
+  </node>
 </launch>

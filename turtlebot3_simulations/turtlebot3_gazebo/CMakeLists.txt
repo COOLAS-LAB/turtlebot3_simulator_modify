@@ -18,10 +18,18 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
   tf
+  message_filters
   gazebo_ros
 )
 
 find_package(gazebo REQUIRED)
+find_package(Eigen3 REQUIRED)
+if (EIGEN3_FOUND)
+    message(STATUS "找到Eigen3:\"${EIGEN3_INCLUDE_DIR}\",ENABLE_EIGEN3宏已打开")
+    include_directories(${EIGEN3_INCLUDE_DIR})
+    add_definitions(-DENABLE_EIGEN3)
+#    list(APPEND LINK_LIB_LIST ${EIGEN3_LIBRARIES})
+endif (EIGEN3_FOUND)
 
 ################################################################################
 # Setup for python modules and scripts
@@ -58,6 +66,10 @@ include_directories(
 add_executable(turtlebot3_drive src/turtlebot3_drive.cpp)
 add_dependencies(turtlebot3_drive ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(turtlebot3_drive ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_executable(uwb_simulator src/uwb_simulator.cpp)
+add_dependencies(uwb_simulator ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(uwb_simulator ${catkin_LIBRARIES})
 
 ################################################################################
 # Install
